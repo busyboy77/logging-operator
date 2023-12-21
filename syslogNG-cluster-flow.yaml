@@ -1,0 +1,15 @@
+# cat syslogNG-cluster-flow.yaml
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: SyslogNGClusterFlow
+metadata:
+  name: syslogng-cluster-flow
+  namespace: logging
+spec:
+  match:
+    regexp:
+      value: json.kubernetes.labels.app.kubernetes.io/instance
+      pattern: "*"
+      type: glob
+  globalOutputRefs:
+    - syslogclusteroutput
+
