@@ -1,0 +1,21 @@
+# cat syslogNG-cluster-output.yaml
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: SyslogNGClusterOutput
+metadata:
+  name: syslogclusteroutput
+  namespace: logging
+spec:
+  elasticsearch:
+    url: "https://devops87.ef.com/es/_bulk"
+    index: "devops88-cluster"
+    type: ""
+    user: "elastic"
+    tls:
+      peer_verify: false
+#      ssl_version: "TLSv1_2"
+    password:
+      valueFrom:
+        secretKeyRef:
+          name: elastic
+          key: password
+# kubectl -n logging create secret generic elastic --from-literal=password=Elastic123
