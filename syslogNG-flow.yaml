@@ -1,0 +1,15 @@
+# cat syslogNG-flow.yaml
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: SyslogNGFlow
+metadata:
+  name: flow-all
+  namespace: quickstart
+spec:
+  match:
+    regexp:
+      value: json.kubernetes.labels.app.kubernetes.io/instance
+      pattern: "*"
+      type: glob
+  localOutputRefs:
+    - syslog-output
+
