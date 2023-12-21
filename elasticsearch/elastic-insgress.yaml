@@ -1,0 +1,29 @@
+# cat elastic-insgress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: test-ca-cluster-issuer
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: 'false'
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  creationTimestamp: '2023-10-23T14:34:33Z'
+  name: elastic
+  namespace: elastic
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: devops87.ef.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: elastic-elasticsearch
+                port:
+                  number: 9200
+            path: /es(/|$)(.*)
+            pathType: Prefix
+  tls:
+    - hosts:
+        - devops87.ef.com
+      secretName: myingress-cert
