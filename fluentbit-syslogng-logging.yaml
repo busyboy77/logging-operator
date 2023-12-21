@@ -1,0 +1,54 @@
+# cat fluentbit-syslogng-logging.yaml
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: Logging
+metadata:
+  name: syslog-ng-logging
+  namespace: logging
+spec:
+  enableRecreateWorkloadOnImmutableFieldChange: true
+  fluentbit:
+    bufferStorage: {}
+    bufferStorageVolume:
+      hostPath:
+        path: ""
+    bufferVolumeImage: {}
+    filterKubernetes: {}
+    image: {}
+    inputTail:
+      storage.type: filesystem
+    positiondb:
+      hostPath:
+        path: ""
+    resources: {}
+    updateStrategy: {}
+  syslogNG:
+#    jsonKeyDelim: "~"
+#  affinity:
+#    nodeAffinity:
+#      preferredDuringSchedulingIgnoredDuringExecution:
+#      - weight: 50
+#        preference:
+#          matchExpressions:
+#          - key: site
+#            operator: In
+#            values:
+#            - primary
+    statefulSet:
+      spec:
+        template:
+          spec:
+            containers:
+            - name: syslog-ng
+              volumeMounts:
+              - mountPath: /buffers
+                name: buffer
+        volumeClaimTemplates:
+        - metadata:
+            name: buffer
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 20Gi
+  controlNamespace: logging
